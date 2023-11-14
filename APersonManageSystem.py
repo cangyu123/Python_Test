@@ -28,7 +28,6 @@ def main():
         except ValueError:
             print()
             print('入力エラー、再入力してください!!!')
-
             time.sleep(2)
 
         else:
@@ -36,8 +35,6 @@ def main():
             if choice not in [1,2,3,4,5,6,7,8]:
                 print()
                 print('入力エラー、再入力してください!!!')
-
-                time.sleep(2)
 
             elif choice == 1:
                 insert()
@@ -74,11 +71,15 @@ def insert():
         per = {'ID':ID,'name':name,'age':age,'date':date,'address':address,'school':school}
         save(per)
         cho = input('入力を続けますか(nで終了):')
+        
+        while cho != 'n' and cho != 'y':
+            cho = input('入力エラー、再入力してください:')
+            
         if cho == 'n':
             break
-    print('2秒後リフレッシュ')
+
     time.sleep(2)
-    os.system('cls')#画面クリア
+
     
 def ID_test():
     while True:
@@ -111,7 +112,7 @@ def date1():
     
     while True:
         date = input('生年月日を入力してください(例:20001001)：')
-        pattern2 = '[0-9]{4}[0-9]{1,2}[0-9]{1,2}$'
+        pattern2 = '[1-9]{4}[0-9]{1,2}[0-9]{1,2}$'
         if not re.match(pattern2,date):
             print('年月型式は異常、再入力してください：')
         else:
@@ -158,10 +159,10 @@ def save(per):
     per3.close()
 
 def delete():
-    flag = 'y'
+    flag = True
     flag2 = True
     pattern1 = '2023[0-9]{4}$'
-    while flag=='y':#ループ終了条件
+    while flag:#ループ終了条件
         num = input('削除しようIDを入力してください：')
         if re.match(pattern1,num):#空判断
             if os.path.exists(filename):#ファイル存在判断
@@ -188,11 +189,13 @@ def delete():
         else:
             print('正しいIDを入力してください！')
 
-        flag = input('削除を続けますか　y/n:')
-
-    
+        cho = input('削除を続けますか　y/n:')
+        while cho != 'n' and cho != 'y':
+            cho = input('入力エラー、再入力してください:')
+        if cho == 'n':
+            break
+        
 def change():
-    flag = 1
     flag2 = True
     per_list = []
     if not os.path.exists(filename):
@@ -229,16 +232,15 @@ def change():
                     print('ユーザーは存在しない！')
                     
                 cho = input('修正を続けますか　y/n:')
-                
-                if cho == 'n':
-                    flag = 0
+                while cho!= 'y' and cho!= 'n':
+                    cho = input('入力エラー、再入力してください:')
                     
-                if flag == 0:
+                if cho == 'n':
                     break
 
 def ouput(per):
     
-    print(f'ID:{per.get("ID")}\n名前:{per.get("name")}\n年齢:{per.get("age")}\n生年月日:{per.get("date")}\n住所:{per.get("address")}\nschool:{per.get("school")}')
+    print(f'ID:{per.get("ID")}\n名前:{per.get("name")}\n年齢:{per.get("age")}\n生年月日:{per.get("date")[:4]}年{per.get("date")[4:6]}月{per.get("date")[6:8]}日\n住所:{per.get("address")}\nschool:{per.get("school")}')
     
 def search():
     flag = 0
@@ -261,6 +263,9 @@ def search():
                     print('該当のユーザーは存在しない！')
         cho = input('検索を続けますか　y/n:')
         
+        while cho!= 'y' and cho!= 'n':
+            cho = input('入力エラー、再入力してください:')
+            
         if cho == 'n':
             break
     
