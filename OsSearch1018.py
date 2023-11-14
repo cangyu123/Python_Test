@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
 import shutil
-#–Ø\‘¢‚Å[“xŒŸõ
+#æœ¨æ§‹é€ ã§æ·±åº¦æ¤œç´¢
 def search_dir(path,result):
-    #•Û‘¶Œ³‚Ì•ªŠò‚ğ“¾‚é
+    #ä¿å­˜å…ƒã®åˆ†å²ã‚’å¾—ã‚‹
     child_files = os.listdir(path)
    # print('chile_files:%s'%(child_files))
     for child in child_files:
-            #path\child‚Æ‚¢‚¤ƒpƒX‚ğ“¾‚é
+            #path\childã¨ã„ã†ãƒ‘ã‚¹ã‚’å¾—ã‚‹
             child = os.path.join(path,child)
            # print(child)
             result.append(child)
@@ -15,7 +15,7 @@ def search_dir(path,result):
                 search_dir(child,result)
 
 
-input_path = input('input:')
+input_path = input('input:')#å…ƒä¿å­˜å…ˆ
 out_path = input('output:')
 
 files = list()
