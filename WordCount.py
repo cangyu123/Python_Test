@@ -1,0 +1,6 @@
+#coding: shift-jis
+
+str1 = input('Input:')
+word = input('Word:')
+
+print('{0}‚Í{1}‚É{2}‰ñ‚ªo‚é'.format(word,str1,str1.count(word)))
