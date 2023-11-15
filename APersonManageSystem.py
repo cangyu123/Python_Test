@@ -70,7 +70,7 @@ def insert():
         school = input('卒業学校を入力してください：')
         per = {'ID':ID,'name':name,'age':age,'date':date,'address':address,'school':school}
         save(per)
-        cho = input('入力を続けますか(nで終了):')
+        cho = input('入力を続けますか(y/n):')
         
         while cho != 'n' and cho != 'y':
             cho = input('入力エラー、再入力してください:')
