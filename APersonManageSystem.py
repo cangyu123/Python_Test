@@ -49,7 +49,7 @@ def main():
                 search()
 
             elif choice == 5:
-                sort()
+                sort1()
                 
             elif choice == 6:
                 total()
@@ -78,22 +78,20 @@ def insert():
         if cho == 'n':
             break
 
-    time.sleep(2)
-
     
-def ID_test():
+def ID_test():#ID正規表現フィルタ
     while True:
-        ID = input('IDを入力してください(例:20230001)：')
+        ID = input('IDを入力してください(例:20230001):')
         pattern1 = '2023[0-9]{4}$'#ID正規表現
         if not re.match(pattern1,ID):
-            print('ID型式は異常、再入力してください：')#型式入力エラー
+            print('ID型式は異常、再入力してください:')#型式入力エラー
 
         else:
             break
 
     return ID
 
-def age_test():
+def age_test():#年齢正規表現フィルタ
     while True:
         try:
             age = int(input('年齢を入力してください：'))
@@ -108,10 +106,10 @@ def age_test():
 
     return age
 
-def date1():
+def date1():#生年月日正規表現フィルタ
     
     while True:
-        date = input('生年月日を入力してください(例:20001001)：')
+        date = input('生年月日を入力してください(例:20001001):')
         pattern2 = '[1-9]{4}[0-9]{1,2}[0-9]{1,2}$'
         if not re.match(pattern2,date):
             print('年月型式は異常、再入力してください：')
@@ -163,7 +161,7 @@ def delete():
     flag2 = True
     pattern1 = '2023[0-9]{4}$'
     while flag:#ループ終了条件
-        num = input('削除しようIDを入力してください：')
+        num = input('削除しようIDを入力してください:')
         if re.match(pattern1,num):#空判断
             if os.path.exists(filename):#ファイル存在判断
                 with open(filename,'r') as perfile:#ファイル内容を読む
@@ -187,7 +185,7 @@ def delete():
                 print('ファイルは存在しない！！')
 
         else:
-            print('正しいIDを入力してください！')
+            print('正しいIDを入力してください!')
 
         cho = input('削除を続けますか　y/n:')
         while cho != 'n' and cho != 'y':
@@ -197,23 +195,25 @@ def delete():
         
 def change():
     flag2 = True
-    per_list = []
+    
     if not os.path.exists(filename):
         print('ファイルは存在しない！！')
     
     else:
         with open(filename, 'r') as filelist:
-            per_list = filelist.readlines()
+            per_list2 = filelist.readlines()
             while True:
-                writefile = open(filename, 'w')
+                per_list = []#出力重複利用
+                writefile = open(filename, 'w')#データをチェンジする為ファイルを開く
                 print('Mで終了')
-                num = input('IDを入力してください：')
-                if num == 'M':
+                num = input('IDを入力してください:')#IDや終了指令
+                if num == 'm':#終了指令
                     break
-                for item in per_list:
+                for item in per_list2:
                     item2 = dict(eval(item))    
                     if item2.get('ID') == num:#ID判断
-                        ouput(item2)
+                        per_list.append(item2)
+                        showper(per_list)
                         print('修正しよう内容を入力してください：')
                         item2['ID'] = ID_test()
                         item2['name'] = input('名前を入力してください：')
@@ -221,14 +221,14 @@ def change():
                         item2['date'] = date1()
                         item2['address'] = input('住所を入力してください：')
                         item2['school'] = input('卒業学校を入力してください：')
-                        writefile.write(str(item2)+'\n')
+                        writefile.write(str(item2)+'\n')#新データを書き込む
                         print('修正しました！')
                         writefile.close()
                         flag2 = False
                         
                     else:
-                        writefile.write(str(item))
-                if flag2 == 1:
+                        writefile.write(str(item2))#対象以外のデータは変わらずに再書き込む
+                if flag2:
                     print('ユーザーは存在しない！')
                     
                 cho = input('修正を続けますか　y/n:')
@@ -238,29 +238,31 @@ def change():
                 if cho == 'n':
                     break
 
-def ouput(per):
-    
-    print(f'ID:{per.get("ID")}\n名前:{per.get("name")}\n年齢:{per.get("age")}\n生年月日:{per.get("date")[:4]}年{per.get("date")[4:6]}月{per.get("date")[6:8]}日\n住所:{per.get("address")}\nschool:{per.get("school")}')
-    
 def search():
     flag = 0
+    
     while True:
+        per_list = []
         if not os.path.exists(filename):
             print('ファイルは存在しない！！')
         
         else:
             with open(filename, 'r') as rfile:
-                per_list = rfile.readlines()
+                per_list2 = rfile.readlines()
                 Id = ID_test()
                 
-                for item in per_list:
+                for item in per_list2:#ファイル内容をリストに付与
                     item2 = dict(eval(item))
-                    if item2.get('ID') == Id:
-                        ouput(item2)
-                        flag = 1
+                    if item2.get('ID') == Id:#ID判断
+                        per_list.append(item2)#転換後のデータを保存
+                        flag = 1#detaが存在している場合
                         
                 if flag == 0:
                     print('該当のユーザーは存在しない！')
+                    
+                else:
+                    showper(per_list)    
+                
         cho = input('検索を続けますか　y/n:')
         
         while cho!= 'y' and cho!= 'n':
@@ -270,17 +272,67 @@ def search():
             break
     
     
-def sort():
-    pass
+def sort1():
+    per_list = []
+    if os.path.exists(filename):
+        with open(filename, 'r') as rfile:
+            per_list2 = rfile.readlines()
+            
+        for item in per_list2:
+            item2 = dict(eval(item))
+
+            per_list.append(item2)
+                
+        asc_or_desc = int(input('IDで昇順、降順(0:昇順, 1:降順):'))
+        if asc_or_desc == 0:
+            cho = False
+        elif asc_or_desc == 1:
+            cho = True
+            
+        per_list.sort(key=lambda x: int(x.get('ID')), reverse=cho)
+        showper(per_list)
+        while True:
+            ck = input('ファイルは存在しない,Mでメニューに戻る')
+            if ck == 'm':
+                break
+            
+    else:   
+        while True:
+            ret = input('ファイルは存在しない,mでメニューに戻る:')
+            if ret == 'm':
+                break
 
 def total():
     pass
 
 def show():
-    pass
-
+    per_list = []#list of source files
+    if not os.path.exists(filename):
+        print('ファイルは存在しない！！')
+        
+    else:
+        with open(filename, 'r') as rfile:
+            per_list2 = rfile.readlines()
+            for item in per_list2:
+                item2 = dict(eval(item))
+                per_list.append(item2)
+                
+            showper(per_list)
+    cho = input('Mでメニューに戻る:')
+    while cho!= 'M':
+        cho = input('入力エラー、再入力してください:')
+        
+        
 def showper(lis):
-    pass
+    formater = '{:^10}\t{:^10}\t{:^10}\t{:^10}\t{:^10}\t{:^10}'#テーブル型式
+    formater2 = '{:^10}\t{:^13}\t{:^12}\t{:^14}\t{:^13}\t{:^10}'
+    if len(lis) == 0:
+        print('ファイルにデータは存在しない、データを入力してください！')
+        
+    else:
+        print(formater.format('ID','名前','年齢','生年月日','住所','卒業学校'))
+        for item in lis:
+            print(formater2.format(item['ID'],item['name'],item['age'],item['date'],item['address'],item['school']))
 
 if __name__ == '__main__':
     main()
