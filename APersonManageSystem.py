@@ -110,7 +110,7 @@ def date1():#生年月日正規表現フィルタ
     
     while True:
         date = input('生年月日を入力してください(例:20001001):')
-        pattern2 = '[1-9]{4}[0-9]{1,2}[0-9]{1,2}$'
+        pattern2 = '[0-9]{4}[0-9]{1,2}[0-9]{1,2}$'
         if not re.match(pattern2,date):
             print('年月型式は異常、再入力してください：')
         else:
@@ -303,7 +303,25 @@ def sort1():
                 break
 
 def total():
-    pass
+    per_list = []
+    if os.path.exists(filename):
+        with open(filename, 'r') as rfile:
+            per_list2 = rfile.readlines()
+        for item in per_list2:
+            item2 = dict(eval(item))
+            per_list.append(item2)
+
+        print(f'人数:{len(per_list)}')
+
+    else:
+        print('file not found')
+    
+    while True:
+        cho = input('mでメインメニューに戻る:')
+        if cho == 'm':
+            break
+        else:
+            print('入力エラー、再入力してください！')
 
 def show():
     per_list = []#list of source files
@@ -318,21 +336,21 @@ def show():
                 per_list.append(item2)
                 
             showper(per_list)
-    cho = input('Mでメニューに戻る:')
-    while cho!= 'M':
+    cho = input('mでメニューに戻る:')
+    while cho!= 'm':
         cho = input('入力エラー、再入力してください:')
         
         
 def showper(lis):
     formater = '{:^10}\t{:^10}\t{:^10}\t{:^10}\t{:^10}\t{:^10}'#テーブル型式
-    formater2 = '{:^10}\t{:^13}\t{:^12}\t{:^14}\t{:^13}\t{:^10}'
+
     if len(lis) == 0:
         print('ファイルにデータは存在しない、データを入力してください！')
         
     else:
         print(formater.format('ID','名前','年齢','生年月日','住所','卒業学校'))
         for item in lis:
-            print(formater2.format(item['ID'],item['name'],item['age'],item['date'],item['address'],item['school']))
+            print(formater.format(item['ID'],item['name'],item['age'],item['date'],item['address'],item['school']))
 
 if __name__ == '__main__':
     main()
